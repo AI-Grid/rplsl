@@ -1,6 +1,5 @@
-# Secondlife Roleplay HUD
 ![plot](http://ai.let-us.cyou/JOpensim/images/ai1.png)
-
+# Roleplay HUD 2020
 This HUD was designed to facilitate and augment roleplay. It supports a currency, loot drops, crafting machines, daily pay, an optional titler, and, of course, a HUD.
 
 Initially built to provide a HUD without in-game mechanics for the Helix City roleplay sim, it is being made available for everyone to use however they want. The only rights on this code is the right for everyone to use what is here on this repo so long as it doesn't infringe on this right.
