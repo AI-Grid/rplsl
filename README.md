@@ -1,4 +1,5 @@
 # Secondlife Roleplay HUD
+![plot](http://ai.let-us.cyou/JOpensim/images/ai1.png)
 
 This HUD was designed to facilitate and augment roleplay. It supports a currency, loot drops, crafting machines, daily pay, an optional titler, and, of course, a HUD.
 
@@ -12,42 +13,42 @@ Marty
 
 # Compiling the code
 
-The code has been built using the [Firestorm LSL Preprocessor directives](https://wiki.firestormviewer.org/fs_preprocessor). This way you can edit the [config.lsl](https://github.com/martysl/rplsl/blob/master/config.lsl) file to apply the necessary global settings.
+The code has been built using the [Firestorm LSL Preprocessor directives](https://wiki.firestormviewer.org/fs_preprocessor). This way you can edit the [config.lsl](https://github.com/martysl/rplsl/blob/master/lsl/config.lsl) file to apply the necessary global settings.
 
 NOTE: These are _not_ the only settings you need to adjust. Many are per-file, so be sure to look at the source code to edit custom messages and other settings as described below.
 
 # How to Configure Your RP HUD System
 
 There are 4 main tasks to setting up your system:
-1. Configure the database & server-side script
+1. Configure the database & php-mysql script
 1. The Admin HUD
 1. The Player HUD & Titler
 1. The looting system
 
 You can also add daily check in benefits and questing.
 
-Be sure you have configured [config.lsl](https://github.com/martysl/rplsl/blob/master/config.lsl) before proceeding.
+Be sure you have configured [config.lsl](https://github.com/martysl/rplsl/blob/master/lsl/config.lsl) before proceeding.
 
-## Configure the database & server-side script
+## Configure the database & php-mysql script
 
-1. Create a MySQL database with tables for the HUD using [mysql-db-creation.sql](https://github.com/martysl/rplsl/blob/master/server-side/mysql-db-creation.sql).
+1. Create a MySQL database with tables for the HUD using [mysql-db-creation.sql](https://github.com/martysl/rplsl/blob/master/php-mysql/mysql-db-creation.sql).
 1. Assign a database user.
-1.  Update the connection details in [api.php](https://github.com/martysl/rplsl/blob/master/server-side/api.php).
-1. Populate the `$hash_seed` variable with a random string to be used to help secure your system. It is also the value in quotes in the [config.lsl](https://github.com/martysl/rplsl/blob/master/config.lsl) file -- they **must** match.
-1. Review the class constants at the top of [Player.php](https://github.com/martysl/rplsl/blob/master/server-side/classes/Player.php) and update them to reflect how you want your system to operate.
+1.  Update the connection details in [api.php](https://github.com/martysl/rplsl/blob/master/php-mysql/api.php).
+1. Populate the `$hash_seed` variable with a random string to be used to help secure your system. It is also the value in quotes in the [config.lsl](https://github.com/martysl/rplsl/blob/master/lsl/config.lsl) file -- they **must** match.
+1. Review the class constants at the top of [Player.php](https://github.com/martysl/rplsl/blob/master/php-mysql/classes/Player.php) and update them to reflect how you want your system to operate.
 
 Once the steps above have been completed, upload the php files to your server.
 
 ## The Admin HUD
 
-Script: [sl-rp-admin-hud-controller](https://github.com/martysl/rplsl/blob/master/sl-rp-admin-hud-controller)
+Script: [sl-rp-admin-hud-controller](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-admin-hud-controller)
 
 Place the script in any object and attach as a HUD. Click to operate.
 
 ## The Player HUD & Titler
 ### Player HUD
 
-Script: [sl-rp-player-hud](https://github.com/martysl/rplsl/blob/master/sl-rp-player-hud)
+Script: [sl-rp-player-hud](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-player-hud)
 
 Stats are displayed as floating text. Place the script in any object set as a HUD attachment point.
 
@@ -57,7 +58,7 @@ No other configuration is necessary.
 
 ### Player Titler
 
-Script: [sl-rp-player-titler](https://github.com/martysl/rplsl/blob/master/sl-rp-player-titler)
+Script: [sl-rp-player-titler](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-player-titler)
 
 The Player Titler requires no additional configuration. Just put in an object and set the attachment point.
 
@@ -77,7 +78,7 @@ These are just objects whose root object is created by you. The system checks ag
 
 ### Items Usable By Players
 
-Script: [sl-rp-consumable-item](https://github.com/martysl/rplsl/blob/master/sl-rp-consumable-item)
+Script: [sl-rp-consumable-item](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-consumable-item)
 
 Experience, health, attack, defense, attack boost, defense boost, and currency can be affected (one or more at the same time) by a usable item. _Attack boost and defense boost are currently placeholders and are not functional._ To set the values for each item which can be consumed, change the value in double quotes at the top of the file. Negative numbers cause harm.
 
@@ -87,7 +88,7 @@ When a usable item is used, it knows it has been used because it sends the comma
 
 ### Loot Drops
 
-Script: [sl-rp-loot-drop](https://github.com/martysl/rplsl/blob/master/sl-rp-loot-drop)
+Script: [sl-rp-loot-drop](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-loot-drop)
 
 You *must* configure each of these variables:
 * `machine_name` -- This is the name of the crafting machine. It will be logged in the database.
@@ -118,19 +119,19 @@ The relative weights determine how likely each item is to be selected. In the ex
 
 Cooldowns operate so that they apply to each player, not the loot drop itself. When a player gets a drop, a time delay is calculated and sent to the server. It is this delay which is used before the player can receive an item from this loot drop again.  For example, if the cooldown is 3600 (1 hour) and the `cooldown_seconds_variation_percent` is .25, then the time selected will 1 hour +/- 15 minutes (.25 * 1 hr); that is, 45 minutes to 1 hour 15 minutes. This feature was added to prevent hoppers from hopping over, collecting, leaving. Stay and roleplay!
 
-As an additional note, on the server-side you are able to set the maximum number of drops per player for a 24 hour rolling window. That will be discussed when that script is uploaded.
+As an additional note, on the php-mysql you are able to set the maximum number of drops per player for a 24 hour rolling window. That will be discussed when that script is uploaded.
 
 ### Crafting Machines
 
-A crafting machine takes one or more items (drops or usable items) in various quantities, delivers a different item, then deletes the items. This system is setup to allow a crafting machine to deliver one of two objects which are labeled the good object and the critical failure object (my fancy word for saying bad). Each crafting machine must be made of 2 prims with the root prim containing the good object and the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine) script. One (and only one) of the linked prims must contain a critical failure object (If you don't want those, lie and put the good object in it too) and the script [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine-crit-failure).
+A crafting machine takes one or more items (drops or usable items) in various quantities, delivers a different item, then deletes the items. This system is setup to allow a crafting machine to deliver one of two objects which are labeled the good object and the critical failure object (my fancy word for saying bad). Each crafting machine must be made of 2 prims with the root prim containing the good object and the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine) script. One (and only one) of the linked prims must contain a critical failure object (If you don't want those, lie and put the good object in it too) and the script [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine-crit-failure).
 
 #### The Crafting Machine
 
-The root object of the crafting machine must contain the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine) script with these variables configured:
+The root object of the crafting machine must contain the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine) script with these variables configured:
 
-* `machine_name` -- the name of the crafting machine. It should match what is put in [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine-crit-failure)
+* `machine_name` -- the name of the crafting machine. It should match what is put in [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine-crit-failure)
 * `ingredients` -- Strided list of the format `"_ITEM_NAME_", (integer)qty_required, 0` (Comment: The last 0 is used as a placeholder when counting players' dropped items)
-* `produced_item` -- The name of the object in inventory which will be given when the required number of each ingredient is in the device and the player clicks it. MUST match what is set in [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine-crit-failure)
+* `produced_item` -- The name of the object in inventory which will be given when the required number of each ingredient is in the device and the player clicks it. MUST match what is set in [sl-rp-crafting-machine-crit-failure](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine-crit-failure)
 * `min_level` -- The minimum required player level to use this crafting machine
 * `failure_message`
 * `success_rate` -- The percentage as a whole number where the desired item is given to the player.
@@ -139,13 +140,13 @@ The root object of the crafting machine must contain the [sl-rp-crafting-machine
 
 #### The Critical Failure Linked Prim (Bad object)
 
-You must configure the machine name for logging purposes. It should match what you set in [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine). The object *must* be the same name as the `produced_item` from the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/sl-rp-crafting-machine) script.
+You must configure the machine name for logging purposes. It should match what you set in [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine). The object *must* be the same name as the `produced_item` from the [sl-rp-crafting-machine](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-crafting-machine) script.
 
 No additional configuration is needed.
 
 ## Daily Checkin
 
-Script: [sl-rp-daily-checkin](https://github.com/martysl/rplsl/blob/master/sl-rp-daily-checkin)
+Script: [sl-rp-daily-checkin](https://github.com/martysl/rplsl/blob/master/lsl/sl-rp-daily-checkin)
 
 Set the `machine_name` in the file for logging purposes. No additional configuration is needed.
 
